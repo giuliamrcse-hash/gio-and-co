@@ -1,418 +1,91 @@
-
-<!DOCTYPE html>
+from pathlib import Path
+html = r'''<!DOCTYPE html>
 <html lang="it">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="theme-color" content="#101c32">
-  <meta name="description" content="Gio&co. — La tua collezione di giochi da tavolo, sempre a portata di mano.">
-  <title>Gio&co. — Board Game Library</title>
-  <style>
-    :root {
-      color-scheme: dark;
-      --navy: #0b1527;
-      --navy-2: #101c32;
-      --blue: #173d60;
-      --petrol: #176a83;
-      --teal: #398c9b;
-      --ice: #a9c9db;
-      --ivory: #eaf0f3;
-      --muted: #9aabba;
-      --line: rgba(194, 218, 232, .13);
-      --panel: rgba(24, 43, 66, .82);
-      --panel-2: #172638;
-      --gold: #c5aa78;
-      --radius: 18px;
-      --shadow: 0 18px 55px rgba(0,0,0,.28);
-    }
-    * { box-sizing: border-box; }
-    html { scroll-behavior: smooth; }
-    body {
-      margin: 0;
-      min-height: 100vh;
-      color: var(--ivory);
-      background:
-        radial-gradient(ellipse at 85% 0%, rgba(23,106,131,.22), transparent 38rem),
-        radial-gradient(ellipse at 0% 35%, rgba(23,61,96,.30), transparent 42rem),
-        linear-gradient(145deg, var(--navy) 0%, var(--navy-2) 48%, #10283d 100%);
-      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      padding-bottom: 94px;
-    }
-    button, input, select { font: inherit; }
-    button { cursor: pointer; }
-    .app-shell { width: min(1180px, 100%); margin: 0 auto; }
-    .topbar {
-      position: sticky; top: 0; z-index: 20;
-      display: flex; align-items: center; justify-content: space-between;
-      padding: 17px clamp(18px, 4vw, 42px);
-      background: rgba(11,21,39,.82);
-      border-bottom: 1px solid var(--line);
-      backdrop-filter: blur(18px);
-    }
-    .brand { display: flex; align-items: center; gap: 11px; min-width: 0; }
-    .brand-mark {
-      width: 39px; height: 39px; display: grid; place-items: center;
-      border-radius: 13px; color: #f3fbff; font-size: 20px; font-weight: 800;
-      background: linear-gradient(145deg, #398c9b, #173d60 72%);
-      box-shadow: 0 7px 24px rgba(23,106,131,.28);
-    }
-    .brand-name { font-size: 22px; font-weight: 760; letter-spacing: -.8px; line-height: 1; }
-    .brand-name span { color: var(--ice); }
-    .brand-sub { margin-top: 5px; font-size: 9px; letter-spacing: 2.1px; color: var(--muted); font-weight: 650; }
-    .top-actions { display: flex; align-items: center; gap: 9px; }
-    .icon-btn, .ghost-btn {
-      border: 1px solid var(--line); color: var(--ivory); background: rgba(255,255,255,.045);
-      border-radius: 12px; padding: 10px 12px;
-    }
-    .icon-btn { width: 42px; height: 42px; display: grid; place-items: center; font-size: 17px; }
-    .main { padding: 28px clamp(18px, 4vw, 42px) 35px; }
-    .view { display: none; animation: fadeIn .22s ease; }
-    .view.active { display: block; }
-    @keyframes fadeIn { from { opacity: .4; transform: translateY(5px); } to { opacity: 1; transform: none; } }
-    .eyebrow { color: var(--ice); font-size: 10px; font-weight: 750; letter-spacing: 2.3px; text-transform: uppercase; }
-    h1,h2,h3,p { margin-top: 0; }
-    h1 { font-size: clamp(31px, 5vw, 52px); letter-spacing: -1.8px; line-height: 1.06; margin: 11px 0 12px; }
-    h2 { font-size: clamp(20px, 2.5vw, 25px); letter-spacing: -.6px; margin: 0; }
-    .muted { color: var(--muted); }
-    .intro { color: #b6c5d2; line-height: 1.65; max-width: 570px; font-size: 14px; }
-    .hero {
-      position: relative; overflow: hidden; min-height: 340px; border-radius: 25px;
-      margin: 10px 0 34px; padding: clamp(24px, 5vw, 48px);
-      display: flex; align-items: end;
-      background:
-        linear-gradient(90deg, rgba(7,17,32,.96) 0%, rgba(10,29,49,.82) 43%, rgba(10,29,49,.12) 100%),
-        linear-gradient(135deg, #153b5b, #176a83 58%, #274d71);
-      border: 1px solid rgba(190,220,237,.18); box-shadow: var(--shadow);
-      isolation: isolate;
-    }
-    .hero::before {
-      content: ""; position: absolute; z-index: -1; width: 390px; height: 390px;
-      right: 6%; top: -65px; border-radius: 50%;
-      background: radial-gradient(circle at 35% 35%, rgba(169,201,219,.45), rgba(57,140,155,.12) 42%, transparent 70%);
-      border: 1px solid rgba(205,232,246,.16);
-      box-shadow: 0 0 0 28px rgba(169,201,219,.025), 0 0 0 58px rgba(169,201,219,.02);
-    }
-    .hero::after {
-      content: "✦"; position: absolute; right: 17%; top: 22%; font-size: clamp(80px, 14vw, 160px);
-      color: rgba(234,240,243,.72); text-shadow: 0 14px 45px rgba(0,0,0,.35);
-      transform: rotate(-12deg);
-    }
-    .hero-copy { max-width: 490px; position: relative; z-index: 1; }
-    .hero-kicker { display: inline-flex; align-items: center; gap: 7px; color: #d1e7f0; font-size: 10px; letter-spacing: 1.8px; font-weight: 750; text-transform: uppercase; }
-    .hero h1 { max-width: 450px; font-size: clamp(34px, 5.3vw, 58px); }
-    .hero p { color: #c0d1dc; line-height: 1.6; font-size: 14px; max-width: 400px; }
-    .hero-buttons { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 21px; }
-    .primary-btn, .secondary-btn {
-      border: 0; border-radius: 12px; padding: 12px 17px; font-weight: 700; font-size: 13px;
-    }
-    .primary-btn { color: #092035; background: linear-gradient(120deg, #d7e9f0, #8dbbce); box-shadow: 0 8px 24px rgba(0,0,0,.18); }
-    .secondary-btn { color: var(--ivory); background: rgba(255,255,255,.10); border: 1px solid rgba(255,255,255,.18); }
-    .stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin: 0 0 36px; }
-    .stat {
-      border: 1px solid var(--line); background: linear-gradient(145deg, rgba(28,53,79,.82), rgba(17,34,55,.75));
-      border-radius: 16px; padding: 17px 19px;
-    }
-    .stat strong { display: block; font-size: 27px; letter-spacing: -.8px; color: #d9edf5; }
-    .stat span { color: var(--muted); font-size: 11px; margin-top: 4px; display: block; }
-    .section { margin: 34px 0; }
-    .section-head { display: flex; justify-content: space-between; align-items: end; gap: 14px; margin-bottom: 16px; }
-    .section-head p { margin: 5px 0 0; color: var(--muted); font-size: 12px; }
-    .text-btn { color: var(--ice); border: 0; background: none; font-size: 12px; font-weight: 700; padding: 8px 0; }
-    .rail { display: grid; grid-auto-flow: column; grid-auto-columns: 150px; gap: 14px; overflow-x: auto; padding: 2px 2px 15px; scroll-snap-type: x mandatory; scrollbar-width: thin; scrollbar-color: #315c78 transparent; }
-    .rail .game-card { scroll-snap-align: start; }
-    .game-card { min-width: 0; cursor: pointer; }
-    .cover {
-      aspect-ratio: 3 / 4; width: 100%; position: relative; overflow: hidden;
-      border-radius: 13px; display: flex; align-items: end; padding: 13px;
-      border: 1px solid rgba(224,241,248,.18); box-shadow: 0 12px 25px rgba(0,0,0,.25);
-      transition: transform .2s ease, box-shadow .2s ease;
-      isolation: isolate;
-    }
-    .game-card:hover .cover { transform: translateY(-5px); box-shadow: 0 18px 34px rgba(0,0,0,.35); }
-    .cover::before { content: ""; position: absolute; inset: 0; z-index: -1; opacity: .9; }
-    .cover::after { content: ""; position: absolute; inset: 0; z-index: -1; background: linear-gradient(0deg, rgba(3,13,26,.94), transparent 66%); }
-    .cover-symbol { position: absolute; top: 18%; left: 0; right: 0; text-align: center; font-size: 55px; filter: drop-shadow(0 8px 14px rgba(0,0,0,.35)); }
-    .cover-title { font-family: Georgia, serif; font-size: 19px; font-weight: 700; line-height: 1.02; letter-spacing: -.4px; text-shadow: 0 2px 8px #000; }
-    .cover-tag { position: absolute; top: 9px; left: 9px; border-radius: 20px; background: rgba(7,20,34,.65); border: 1px solid rgba(255,255,255,.22); padding: 5px 7px; font-size: 8px; letter-spacing: 1px; text-transform: uppercase; }
-    .cover-a::before { background: radial-gradient(circle at 50% 30%, #5da4b2, transparent 34%), linear-gradient(145deg,#102d4b,#176a83 58%,#07182d); }
-    .cover-b::before { background: radial-gradient(circle at 50% 28%, #c3a36c, transparent 27%), linear-gradient(145deg,#563d46,#1a4260 65%,#09182c); }
-    .cover-c::before { background: radial-gradient(circle at 50% 32%, #9cc8db, transparent 29%), linear-gradient(145deg,#254e71,#14263f 70%,#071326); }
-    .cover-d::before { background: radial-gradient(circle at 50% 27%, #5eaa9f, transparent 32%), linear-gradient(145deg,#164b54,#15354f 65%,#071629); }
-    .cover-e::before { background: radial-gradient(circle at 50% 30%, #d3b77d, transparent 28%), linear-gradient(145deg,#314d6d,#27334c 60%,#10182c); }
-    .cover-f::before { background: radial-gradient(circle at 50% 28%, #7b9bbd, transparent 30%), linear-gradient(145deg,#273c64,#176a83 65%,#071629); }
-    .game-meta { padding: 10px 2px 0; }
-    .game-meta strong { display: block; font-size: 13px; font-weight: 700; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-    .game-meta span { display: block; margin-top: 5px; color: var(--muted); font-size: 10px; }
-    .toolbar { display: flex; gap: 10px; margin: 18px 0 17px; flex-wrap: wrap; }
-    .search, .filter {
-      background: rgba(14,29,48,.85); color: var(--ivory); border: 1px solid var(--line);
-      border-radius: 12px; padding: 12px 14px; outline: none;
-    }
-    .search { flex: 1 1 220px; min-width: 0; }
-    .filter { flex: 0 1 175px; }
-    .search:focus, .filter:focus { border-color: var(--teal); box-shadow: 0 0 0 3px rgba(57,140,155,.12); }
-    .catalog-grid { display: grid; grid-template-columns: repeat(5, minmax(0,1fr)); gap: 19px 15px; }
-    .catalog-grid .cover { aspect-ratio: 3 / 4; }
-    .empty { border: 1px dashed rgba(169,201,219,.25); border-radius: 16px; padding: 35px 20px; text-align: center; color: var(--muted); line-height: 1.7; }
-    .feature-panel { padding: 24px; border-radius: 20px; border: 1px solid var(--line); background: linear-gradient(135deg, rgba(23,61,96,.75), rgba(19,43,65,.75)); }
-    .feature-panel h2 { margin-bottom: 10px; }
-    .bottom-nav {
-      position: fixed; z-index: 30; bottom: 0; left: 0; right: 0;
-      display: flex; justify-content: center; padding: 10px 12px max(10px, env(safe-area-inset-bottom));
-      background: rgba(8,18,33,.91); border-top: 1px solid var(--line); backdrop-filter: blur(20px);
-    }
-    .nav-inner { width: min(620px,100%); display: flex; justify-content: space-around; align-items: center; }
-    .nav-btn { min-width: 65px; border: 0; background: none; color: #8195a8; padding: 5px 7px; font-size: 10px; font-weight: 650; display: grid; gap: 4px; justify-items: center; }
-    .nav-btn .nav-icon { font-size: 19px; line-height: 1.1; }
-    .nav-btn.active { color: #b9dce9; }
-    .nav-add { width: 43px; height: 43px; border-radius: 15px; border: 1px solid rgba(207,232,243,.25); color: #f4fbff; background: linear-gradient(145deg, #398c9b, #176a83); font-size: 25px; margin-top: -19px; box-shadow: 0 8px 24px rgba(23,106,131,.35); }
-    .modal-backdrop { position: fixed; inset: 0; z-index: 50; display: none; place-items: center; padding: 18px; background: rgba(2,9,18,.76); backdrop-filter: blur(8px); }
-    .modal-backdrop.open { display: grid; }
-    .modal { width: min(470px,100%); background: #13263c; border: 1px solid var(--line); border-radius: 20px; padding: 22px; box-shadow: var(--shadow); }
-    .modal-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; }
-    .modal h2 { font-size: 22px; }
-    .close { background: none; border: 0; color: var(--muted); font-size: 24px; }
-    .field { display: grid; gap: 7px; margin: 13px 0; }
-    .field label { color: var(--muted); font-size: 11px; font-weight: 700; }
-    .field input, .field select { width: 100%; background: #0d1b2d; color: var(--ivory); border: 1px solid var(--line); border-radius: 10px; padding: 12px; }
-    .note { color: var(--muted); font-size: 11px; line-height: 1.5; }
-    .toast { position: fixed; z-index: 70; bottom: 90px; left: 50%; transform: translate(-50%,15px); opacity: 0; pointer-events: none; background: #d8edf4; color: #10243a; padding: 11px 16px; border-radius: 12px; font-size: 12px; font-weight: 700; transition: .2s; }
-    .toast.show { opacity: 1; transform: translate(-50%,0); }
-    @media (max-width: 850px) { .catalog-grid { grid-template-columns: repeat(4,minmax(0,1fr)); } }
-    @media (max-width: 600px) {
-      .topbar { padding: 14px 17px; }
-      .main { padding: 22px 17px 28px; }
-      .hero { min-height: 330px; padding: 23px; }
-      .hero::before { width: 260px; height: 260px; right: -40px; top: -10px; }
-      .hero::after { right: 8%; top: 18%; font-size: 105px; }
-      .stats { gap: 8px; }
-      .stat { padding: 13px 12px; }
-      .stat strong { font-size: 23px; }
-      .stat span { font-size: 10px; }
-      .rail { grid-auto-columns: 132px; gap: 12px; }
-      .catalog-grid { grid-template-columns: repeat(3,minmax(0,1fr)); gap: 15px 11px; }
-      .cover { border-radius: 11px; padding: 10px; }
-      .cover-title { font-size: 16px; }
-      .cover-symbol { font-size: 43px; }
-      .game-meta strong { font-size: 12px; }
-      .filter { flex: 1 1 130px; }
-      .status-label { display: none; }
-    }
-    @media (max-width: 360px) { .catalog-grid { grid-template-columns: repeat(2,minmax(0,1fr)); } }
-  </style>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#101c32">
+<title>Gio&co. — Board Game Library</title>
+<style>
+:root{color-scheme:dark;--navy:#0b1527;--navy2:#101c32;--blue:#173d60;--petrol:#176a83;--teal:#398c9b;--ice:#a9c9db;--ivory:#eaf0f3;--muted:#9aabba;--line:rgba(194,218,232,.13);--panel:rgba(24,43,66,.88);--gold:#c5aa78;--radius:18px}
+*{box-sizing:border-box}body{margin:0;min-height:100vh;color:var(--ivory);background:radial-gradient(ellipse at 85% 0%,rgba(23,106,131,.22),transparent 38rem),radial-gradient(ellipse at 0% 35%,rgba(23,61,96,.3),transparent 42rem),linear-gradient(145deg,var(--navy),var(--navy2) 48%,#10283d);font-family:Inter,system-ui,-apple-system,"Segoe UI",sans-serif;padding-bottom:92px}
+button,input,select,textarea{font:inherit}button{cursor:pointer}.app{width:min(1180px,100%);margin:auto}.topbar{position:sticky;top:0;z-index:20;display:flex;align-items:center;justify-content:space-between;padding:15px clamp(17px,4vw,42px);background:rgba(11,21,39,.88);border-bottom:1px solid var(--line);backdrop-filter:blur(18px)}
+.brand{display:flex;align-items:center;gap:11px}.mark{width:39px;height:39px;display:grid;place-items:center;border-radius:13px;font-size:20px;font-weight:800;background:linear-gradient(145deg,#398c9b,#173d60 72%)}.brandname{font-size:22px;font-weight:800;letter-spacing:-.8px}.brandname span{color:var(--ice)}.sub{font-size:9px;letter-spacing:2px;color:var(--muted);margin-top:4px}.main{padding:27px clamp(17px,4vw,42px)}.view{display:none;animation:fade .2s}.view.active{display:block}@keyframes fade{from{opacity:.4;transform:translateY(4px)}to{opacity:1}}
+.eyebrow{font-size:10px;letter-spacing:2px;font-weight:800;color:var(--ice)}h1{font-size:clamp(30px,5vw,49px);letter-spacing:-1.5px;margin:10px 0}h2{font-size:22px;margin:0}h3{font-size:16px;margin:0}.intro{color:#b6c5d2;line-height:1.6;max-width:650px;font-size:14px}.muted,.note{color:var(--muted)}.note{font-size:11px;line-height:1.55}.hero{min-height:310px;border-radius:25px;margin:12px 0 27px;padding:clamp(23px,5vw,45px);display:flex;align-items:end;background:linear-gradient(90deg,rgba(7,17,32,.96),rgba(10,29,49,.75) 52%,rgba(10,29,49,.1)),radial-gradient(circle at 78% 30%,rgba(169,201,219,.38),transparent 24%),linear-gradient(135deg,#153b5b,#176a83 58%,#274d71);border:1px solid rgba(190,220,237,.18)}.hero-copy{max-width:510px}.hero p{color:#c0d1dc;line-height:1.6;font-size:14px}.hero h1{font-size:clamp(34px,5vw,56px)}.actions{display:flex;gap:9px;flex-wrap:wrap;margin-top:18px}
+.btn,.secondary,.danger{border:0;border-radius:11px;padding:11px 15px;font-size:12px;font-weight:750}.btn{color:#092035;background:linear-gradient(120deg,#d7e9f0,#8dbbce)}.secondary{color:var(--ivory);background:rgba(255,255,255,.08);border:1px solid var(--line)}.danger{color:#ffd8d8;background:rgba(160,55,65,.18);border:1px solid rgba(255,130,130,.2)}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:11px;margin:0 0 32px}.stat,.panel,.game-detail,.scorebox{border:1px solid var(--line);background:linear-gradient(145deg,rgba(28,53,79,.82),rgba(17,34,55,.8));border-radius:16px;padding:17px}.stat strong{display:block;font-size:27px;color:#d9edf5}.stat span{font-size:11px;color:var(--muted)}
+.section{margin:30px 0}.sectionhead{display:flex;align-items:end;justify-content:space-between;gap:12px;margin-bottom:14px}.sectionhead p{font-size:12px;color:var(--muted);margin:5px 0 0}.textbtn{border:0;background:none;color:var(--ice);font-size:12px;font-weight:750}
+.rail{display:grid;grid-auto-flow:column;grid-auto-columns:145px;gap:13px;overflow:auto;padding:3px 2px 14px}.cover{aspect-ratio:3/4;border-radius:13px;position:relative;display:flex;align-items:end;padding:12px;overflow:hidden;border:1px solid rgba(224,241,248,.18);background:radial-gradient(circle at 50% 28%,var(--glow,#7bb5c8),transparent 31%),linear-gradient(145deg,var(--c1,#173d60),var(--c2,#071629));box-shadow:0 12px 25px rgba(0,0,0,.25)}.cover:after{content:"";position:absolute;inset:0;background:linear-gradient(0deg,rgba(3,13,26,.95),transparent 70%)}.cover-symbol{position:absolute;top:22%;left:0;right:0;text-align:center;font-size:52px;z-index:1}.cover-title{font:700 18px Georgia,serif;line-height:1.05;text-shadow:0 2px 8px #000;z-index:2}.cover-tag{position:absolute;top:9px;left:9px;z-index:2;background:#071a2bbd;border:1px solid #ffffff30;border-radius:20px;padding:4px 7px;font-size:8px;text-transform:uppercase;letter-spacing:1px}
+.game-card{min-width:0;cursor:pointer}.game-meta{padding:9px 2px}.game-meta strong{display:block;font-size:12px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.game-meta span{display:block;color:var(--muted);font-size:10px;margin-top:4px}
+.toolbar{display:flex;gap:9px;flex-wrap:wrap;margin:17px 0}.search,.filter,.field input,.field select,.field textarea{background:#0d1b2d;color:var(--ivory);border:1px solid var(--line);border-radius:11px;padding:11px 13px;outline:none}.search{flex:1 1 220px}.filter{flex:0 1 170px}.grid{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:17px 14px}
+.bottom{position:fixed;bottom:0;left:0;right:0;z-index:30;display:flex;justify-content:center;padding:9px 10px max(9px,env(safe-area-inset-bottom));background:#081221ed;border-top:1px solid var(--line);backdrop-filter:blur(18px)}.nav{width:min(650px,100%);display:flex;justify-content:space-around}.nav button{border:0;background:none;color:#8195a8;font-size:10px;display:grid;gap:4px;justify-items:center;min-width:58px;padding:4px}.nav button b{font-size:19px;font-weight:500}.nav button.active{color:#b9dce9}.nav .add{width:42px;height:42px;border-radius:14px;background:linear-gradient(145deg,#398c9b,#176a83);color:white;font-size:23px;margin-top:-17px}
+.panel{margin:15px 0}.panel p{color:#b6c5d2;line-height:1.6;font-size:13px}.split{display:grid;grid-template-columns:1fr 1fr;gap:12px}.field{display:grid;gap:6px;margin:11px 0}.field label{font-size:11px;color:var(--muted);font-weight:700}.field input,.field select,.field textarea{width:100%}.field textarea{min-height:75px;resize:vertical}
+.pill{display:inline-block;border:1px solid var(--line);border-radius:30px;padding:5px 9px;font-size:10px;color:var(--ice);margin:3px}.rating{font-size:22px;letter-spacing:2px;color:var(--gold)}.rating button{border:0;background:none;color:var(--gold);font-size:22px;padding:0 1px}
+.modal{position:fixed;inset:0;z-index:60;display:none;place-items:center;padding:16px;background:#020912c9;backdrop-filter:blur(7px)}.modal.open{display:grid}.modalbox{width:min(650px,100%);max-height:90vh;overflow:auto;background:#13263c;border:1px solid var(--line);border-radius:20px;padding:21px;box-shadow:0 20px 60px #0008}.modalhead{display:flex;justify-content:space-between;align-items:center;margin-bottom:15px}.close{border:0;background:none;color:var(--muted);font-size:25px}.row{display:flex;gap:10px;align-items:center;flex-wrap:wrap}.empty{padding:25px;border:1px dashed var(--line);border-radius:15px;color:var(--muted);text-align:center;line-height:1.6}.score-row{display:grid;grid-template-columns:1.3fr 1fr 1fr;gap:8px;align-items:center;margin:8px 0}.score-row input{min-width:0;width:100%;background:#0d1b2d;color:white;border:1px solid var(--line);border-radius:8px;padding:9px}.total{font-size:24px;color:var(--ice);font-weight:800}.listitem{padding:12px 0;border-bottom:1px solid var(--line)}.listitem:last-child{border:0}
+@media(max-width:850px){.grid{grid-template-columns:repeat(4,minmax(0,1fr))}}@media(max-width:600px){.main{padding:22px 16px}.hero{min-height:300px;padding:22px}.grid{grid-template-columns:repeat(3,minmax(0,1fr));gap:13px 10px}.stats{gap:7px}.stat{padding:12px}.stat strong{font-size:22px}.rail{grid-auto-columns:130px}.split{grid-template-columns:1fr}.score-row{grid-template-columns:1fr 1fr 1fr}}@media(max-width:360px){.grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+</style>
 </head>
 <body>
-  <div class="app-shell">
-    <header class="topbar">
-      <div class="brand">
-        <div class="brand-mark">G</div>
-        <div>
-          <div class="brand-name">Gio<span>&</span>co.</div>
-          <div class="brand-sub">BOARD GAME LIBRARY</div>
-        </div>
-      </div>
-      <div class="top-actions">
-        <span class="status-label muted" style="font-size:11px">YOUR PRIVATE COLLECTION</span>
-        <button class="icon-btn" aria-label="Aggiungi gioco" onclick="openAddModal()">＋</button>
-      </div>
-    </header>
-
-    <main class="main">
-      <section id="homeView" class="view active">
-        <div class="eyebrow">LA VOSTRA COLLEZIONE</div>
-        <h1>Che cosa giochiamo oggi?</h1>
-        <p class="intro">Tutti i vostri giochi, le regole e le prossime avventure. In un unico posto.</p>
-
-        <div class="hero">
-          <div class="hero-copy">
-            <div class="hero-kicker">✦ &nbsp; IN EVIDENZA · DEMO</div>
-            <h1>La prossima avventura inizia qui.</h1>
-            <p>Scoprite la collezione, ritrovate i vostri preferiti e scegliete il prossimo tavolo da conquistare.</p>
-            <div class="hero-buttons">
-              <button class="primary-btn" onclick="showView('libraryView','library')">Esplora la libreria</button>
-              <button class="secondary-btn" onclick="showView('assistantView','assistant')">Apri Game Master</button>
-            </div>
-          </div>
-        </div>
-
-        <div class="stats">
-          <div class="stat"><strong id="gameCount">6</strong><span>Giochi in libreria</span></div>
-          <div class="stat"><strong id="expansionCount">0</strong><span>Espansioni</span></div>
-          <div class="stat"><strong id="playCount">0</strong><span>Partite registrate</span></div>
-        </div>
-
-        <section class="section">
-          <div class="section-head">
-            <div><h2>Da riscoprire</h2><p>Un posto in prima fila per i vostri giochi</p></div>
-            <button class="text-btn" onclick="showView('libraryView','library')">Vedi tutto →</button>
-          </div>
-          <div class="rail" id="featuredRail"></div>
-        </section>
-
-        <section class="section">
-          <div class="section-head">
-            <div><h2>Aggiunti di recente</h2><p>Le ultime scatole entrate in collezione</p></div>
-            <button class="text-btn" onclick="showView('libraryView','library')">Catalogo →</button>
-          </div>
-          <div class="rail" id="recentRail"></div>
-        </section>
-      </section>
-
-      <section id="libraryView" class="view">
-        <div class="eyebrow">TUTTO SOTTO CONTROLLO</div>
-        <h1>La libreria</h1>
-        <p class="intro">Cerca, filtra e ritrova il gioco giusto per la serata.</p>
-        <div class="toolbar">
-          <input id="searchInput" class="search" type="search" placeholder="⌕  Cerca un gioco..." aria-label="Cerca un gioco">
-          <select id="playerFilter" class="filter" aria-label="Filtra per giocatori">
-            <option value="">Giocatori: tutti</option>
-            <option value="2">Include 2 giocatori</option>
-            <option value="3">Include 3 giocatori</option>
-            <option value="4">Include 4 giocatori</option>
-          </select>
-          <select id="sortFilter" class="filter" aria-label="Ordina giochi">
-            <option value="az">Nome: A–Z</option>
-            <option value="za">Nome: Z–A</option>
-          </select>
-        </div>
-        <div class="catalog-grid" id="catalogGrid"></div>
-        <div id="noResults" class="empty" style="display:none">Nessun gioco trovato.<br>Prova a modificare la ricerca o i filtri.</div>
-      </section>
-
-      <section id="assistantView" class="view">
-        <div class="eyebrow">IL VOSTRO ARBITRO PERSONALE</div>
-        <h1>Game Master</h1>
-        <div class="feature-panel">
-          <div class="hero-kicker">✦ &nbsp; IN PREPARAZIONE</div>
-          <h2>Le regole, senza interrompere la partita.</h2>
-          <p class="intro">In questa sezione potrete selezionare un gioco e fare domande sul suo regolamento. L'assistente citerà la fonte quando disponibile e segnalerà quando una risposta non è verificabile.</p>
-          <p class="note">L'assistente AI e l'archivio dei regolamenti verranno collegati in una fase successiva. Questa anteprima non invia ancora domande.</p>
-        </div>
-      </section>
-
-      <section id="profileView" class="view">
-        <div class="eyebrow">IL VOSTRO SPAZIO</div>
-        <h1>Profilo</h1>
-        <div class="feature-panel">
-          <h2>Gio&co.</h2>
-          <p class="intro">Qui troverete sincronizzazione, backup, gestione della collezione e preferenze dell'app.</p>
-          <p class="note">Versione prototipo 0.2 · I dati demo sono salvati soltanto in questa pagina e non sono ancora sincronizzati.</p>
-        </div>
-      </section>
-    </main>
-  </div>
-
-  <nav class="bottom-nav" aria-label="Navigazione principale">
-    <div class="nav-inner">
-      <button class="nav-btn active" data-view="homeView"><span class="nav-icon">⌂</span>Home</button>
-      <button class="nav-btn" data-view="libraryView"><span class="nav-icon">▦</span>Libreria</button>
-      <button class="nav-add" aria-label="Aggiungi gioco" onclick="openAddModal()">＋</button>
-      <button class="nav-btn" data-view="assistantView"><span class="nav-icon">✧</span>Game Master</button>
-      <button class="nav-btn" data-view="profileView"><span class="nav-icon">◉</span>Profilo</button>
-    </div>
-  </nav>
-
-  <div class="modal-backdrop" id="addModal" role="dialog" aria-modal="true" aria-labelledby="modalTitle" onclick="if(event.target===this)closeAddModal()">
-    <div class="modal">
-      <div class="modal-top">
-        <div><div class="eyebrow">NUOVO ELEMENTO</div><h2 id="modalTitle">Aggiungi un gioco</h2></div>
-        <button class="close" aria-label="Chiudi" onclick="closeAddModal()">×</button>
-      </div>
-      <form id="addForm">
-        <div class="field"><label for="gameName">Nome del gioco</label><input id="gameName" required maxlength="70" placeholder="Es. Catan"></div>
-        <div class="field"><label for="gamePlayers">Numero massimo di giocatori</label><select id="gamePlayers"><option value="2">2</option><option value="3">3</option><option value="4" selected>4</option><option value="5">5</option><option value="6">6</option><option value="8">8+</option></select></div>
-        <div class="field"><label for="gameDuration">Durata indicativa (minuti)</label><input id="gameDuration" type="number" min="5" max="600" value="60"></div>
-        <button class="primary-btn" type="submit" style="width:100%;margin-top:8px">Aggiungi alla demo</button>
-        <p class="note" style="margin:12px 0 0">Nota: in questa anteprima i nuovi giochi restano nella sessione corrente. Il salvataggio permanente e la sincronizzazione arriveranno con il database.</p>
-      </form>
-    </div>
-  </div>
-  <div class="toast" id="toast" role="status"></div>
-
-  <script>
-    const demoGames = [
-      {id:1,name:"Wingspan",players:5,duration:70,tag:"Strategia",symbol:"🪶",cover:"cover-a",detail:"Un'avventura tra gli uccelli e gli habitat naturali."},
-      {id:2,name:"Dune: Imperium",players:4,duration:90,tag:"Deck building",symbol:"☀",cover:"cover-b",detail:"Intrighi, alleanze e controllo di Arrakis."},
-      {id:3,name:"Azul",players:4,duration:40,tag:"Astratto",symbol:"✧",cover:"cover-c",detail:"Componi splendidi mosaici e pianifica le mosse."},
-      {id:4,name:"Cascadia",players:4,duration:45,tag:"Puzzle",symbol:"🌲",cover:"cover-d",detail:"Crea un ecosistema armonioso nel Pacifico."},
-      {id:5,name:"Root",players:4,duration:90,tag:"Asimmetrico",symbol:"♜",cover:"cover-e",detail:"Fazioni in lotta per il dominio del bosco."},
-      {id:6,name:"The Crew",players:5,duration:20,tag:"Cooperativo",symbol:"✦",cover:"cover-f",detail:"Una missione spaziale a prese e collaborazione."}
-    ];
-    let games = [...demoGames];
-    let nextId = 7;
-
-    function cardMarkup(game) {
-      return `<article class="game-card" tabindex="0" role="button" aria-label="Dettagli ${escapeHtml(game.name)}" onclick="showGameDetails(${game.id})" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();showGameDetails(${game.id})}">
-        <div class="cover ${game.cover || 'cover-a'}">
-          <span class="cover-tag">${escapeHtml(game.tag || 'Collezione')}</span>
-          <span class="cover-symbol">${game.symbol || '♟'}</span>
-          <span class="cover-title">${escapeHtml(game.name)}</span>
-        </div>
-        <div class="game-meta"><strong>${escapeHtml(game.name)}</strong><span>${game.players} giocatori · ${game.duration} min</span></div>
-      </article>`;
-    }
-    function escapeHtml(value) {
-      return String(value).replace(/[&<>"']/g, char => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[char]));
-    }
-    function render() {
-      document.getElementById('featuredRail').innerHTML = games.slice(0,5).map(cardMarkup).join('');
-      document.getElementById('recentRail').innerHTML = [...games].slice(-5).reverse().map(cardMarkup).join('');
-      document.getElementById('gameCount').textContent = games.length;
-      renderCatalog();
-    }
-    function renderCatalog() {
-      const query = document.getElementById('searchInput').value.trim().toLowerCase();
-      const players = document.getElementById('playerFilter').value;
-      const sort = document.getElementById('sortFilter').value;
-      let filtered = games.filter(game => game.name.toLowerCase().includes(query) && (!players || game.players >= Number(players)));
-      filtered.sort((a,b) => sort === 'za' ? b.name.localeCompare(a.name) : a.name.localeCompare(b.name));
-      document.getElementById('catalogGrid').innerHTML = filtered.map(cardMarkup).join('');
-      document.getElementById('noResults').style.display = filtered.length ? 'none' : 'block';
-    }
-    function showView(viewId, navName) {
-      document.querySelectorAll('.view').forEach(view => view.classList.remove('active'));
-      document.getElementById(viewId).classList.add('active');
-      document.querySelectorAll('.nav-btn').forEach(btn => btn.classList.toggle('active', btn.dataset.view === viewId));
-      window.scrollTo({top:0,behavior:'smooth'});
-    }
-    document.querySelectorAll('.nav-btn').forEach(btn => btn.addEventListener('click', () => showView(btn.dataset.view)));
-    document.getElementById('searchInput').addEventListener('input', renderCatalog);
-    document.getElementById('playerFilter').addEventListener('change', renderCatalog);
-    document.getElementById('sortFilter').addEventListener('change', renderCatalog);
-
-    function showGameDetails(id) {
-      const game = games.find(item => item.id === id);
-      if (!game) return;
-      showToast(`${game.name} · ${game.players} giocatori · circa ${game.duration} min`);
-    }
-    function openAddModal() {
-      document.getElementById('addModal').classList.add('open');
-      setTimeout(() => document.getElementById('gameName').focus(), 50);
-    }
-    function closeAddModal() { document.getElementById('addModal').classList.remove('open'); }
-    document.getElementById('addForm').addEventListener('submit', event => {
-      event.preventDefault();
-      const name = document.getElementById('gameName').value.trim();
-      if (!name) return;
-      games.push({
-        id: nextId++, name,
-        players: Number(document.getElementById('gamePlayers').value),
-        duration: Number(document.getElementById('gameDuration').value) || 60,
-        tag: "Da catalogare", symbol:"♟", cover:["cover-a","cover-b","cover-c","cover-d","cover-e","cover-f"][games.length % 6]
-      });
-      render();
-      closeAddModal();
-      event.target.reset();
-      showToast(`${name} aggiunto alla demo`);
-    });
-    function showToast(message) {
-      const toast = document.getElementById('toast');
-      toast.textContent = message;
-      toast.classList.add('show');
-      clearTimeout(window.toastTimer);
-      window.toastTimer = setTimeout(() => toast.classList.remove('show'), 2600);
-    }
-    render();
-  </script>
-</body>
-</html>
+<div class="app">
+<header class="topbar"><div class="brand"><div class="mark">G</div><div><div class="brandname">Gio<span>&</span>co.</div><div class="sub">BOARD GAME LIBRARY</div></div></div><div class="row"><span class="note">COLLEZIONE PRIVATA</span><button class="secondary" onclick="openGameForm()">＋ Aggiungi</button></div></header>
+<main class="main">
+<section id="home" class="view active">
+<div class="eyebrow">LA VOSTRA COLLEZIONE</div><h1>Che cosa giochiamo oggi?</h1><p class="intro">Giochi, ricordi, regolamenti e punteggi. Tutto intorno al tavolo.</p>
+<div class="hero"><div class="hero-copy"><div class="eyebrow">✦ IL VOSTRO TAVOLO, IN UN POSTO SOLO</div><h1>La prossima avventura inizia qui.</h1><p>Esplora la collezione, tieni traccia delle partite e chiedi aiuto al Game Master quando le regole si fanno complicate.</p><div class="actions"><button class="btn" onclick="go('library')">Esplora la libreria</button><button class="secondary" onclick="go('master')">Apri Game Master</button></div></div></div>
+<div class="stats"><div class="stat"><strong id="countGames">—</strong><span>Giochi in libreria</span></div><div class="stat"><strong id="countExp">—</strong><span>Espansioni</span></div><div class="stat"><strong id="countPlays">0</strong><span>Partite registrate</span></div></div>
+<section class="section"><div class="sectionhead"><div><h2>Da riscoprire</h2><p>Un posto in prima fila</p></div><button class="textbtn" onclick="go('library')">Vedi tutto →</button></div><div class="rail" id="featured"></div></section>
+<div class="panel"><div class="sectionhead"><div><h2>Il prossimo passo</h2><p>Collega il database per caricare la collezione completa</p></div><span class="pill">ANTEPRIMA</span></div><p>Questa versione presenta la nuova organizzazione dell'app. I dati mostrati sono esempi locali: non sono ancora sincronizzati con Google Sheets.</p></div>
+</section>
+<section id="library" class="view"><div class="eyebrow">TUTTO SOTTO CONTROLLO</div><h1>La libreria</h1><p class="intro">Cerca e filtra i giochi. Apri una scheda per votare, annotare e consultare la collezione.</p><div class="toolbar"><input id="q" class="search" placeholder="⌕ Cerca un gioco…"><select id="sort" class="filter"><option value="az">Nome A–Z</option><option value="za">Nome Z–A</option><option value="rating">Rating BGG</option></select></div><div id="catalog" class="grid"></div></section>
+<section id="master" class="view"><div class="eyebrow">IL VOSTRO ARBITRO PERSONALE</div><h1>Game Master</h1><p class="intro">Dubbi sulle regole? Qui troverà posto l'assistente che consulta i regolamenti caricati per ogni gioco.</p><div class="panel"><div class="eyebrow">ASSISTENTE AI · IN PREPARAZIONE</div><h2>Le regole, senza interrompere la partita.</h2><div class="field"><label>Gioco</label><select id="masterGame"></select></div><div class="field"><label>La tua domanda</label><textarea id="masterQuestion" placeholder="Es. Posso giocare questa carta dopo aver…"></textarea></div><button class="btn" onclick="showToast('Il Game Master sarà attivato quando collegheremo AI e regolamenti.')">Chiedi al Game Master</button><p class="note">L'assistente non è ancora collegato. La versione definitiva userà i PDF caricati, citerà pagina e sezione e dichiarerà quando non trova una risposta verificabile.</p></div><div class="panel"><h3>Regolamenti</h3><p>Archivio dei manuali associati ai giochi: PDF, lingua, edizione e versione.</p><button class="secondary" onclick="showToast('Archivio regolamenti in preparazione')">Gestisci regolamenti</button></div></section>
+<section id="play" class="view"><div class="eyebrow">AL TAVOLO</div><h1>Play Center</h1><p class="intro">Registra una partita, inserisci i punteggi per giocatore e lascia che Gio&co. calcoli i totali.</p><div class="panel"><div class="field"><label>Gioco</label><select id="playGame"></select></div><div class="field"><label>Nome giocatori (separati da virgola)</label><input id="playerNames" placeholder="Es. Giulia, Giovanni, Luca"></div><div class="field"><label>Categorie di punteggio</label><p class="note">Inserisci una categoria per colonna: il prototipo somma i valori di ogni giocatore. I sistemi specifici per gioco e i moltiplicatori saranno configurabili nella versione collegata.</p><input id="categories" value="Punti base, Bonus, Penalità"></div><div id="scoreTable"></div><div class="row"><button class="secondary" onclick="buildScoreTable()">Crea tabella punteggi</button><button class="btn" onclick="savePlay()">Salva partita</button></div><div id="scoreResult" class="note"></div></div><div class="panel"><div class="sectionhead"><div><h2>Storico partite</h2><p>Partite registrate in questo dispositivo</p></div></div><div id="playHistory" class="note">Nessuna partita registrata.</div></div></section>
+<section id="profile" class="view"><div class="eyebrow">IL VOSTRO SPAZIO</div><h1>Profilo</h1><div class="panel"><h2>Gio&co.</h2><p>Database centrale, sincronizzazione, account e preferenze.</p><span class="pill">Firebase da configurare</span><span class="pill">Google Sheets collegato in fase successiva</span><p class="note">Il backend Apps Script è attualmente privato (Solo io). Non inseriremo URL o segreti in questo frontend pubblico. L'accesso condiviso verrà configurato con Firebase e un backend che verifichi l'identità.</p></div><div class="panel"><h3>Esporta i dati locali</h3><p>Scarica le note e le partite di questa anteprima.</p><button class="secondary" onclick="exportLocal()">Esporta JSON</button></div></section>
+</main>
+</div>
+<nav class="bottom"><div class="nav"><button class="active" data-go="home"><b>⌂</b>Home</button><button data-go="library"><b>▦</b>Libreria</button><button class="add" onclick="openGameForm()">＋</button><button data-go="master"><b>✧</b>Game Master</button><button data-go="play"><b>◷</b>Play Center</button><button data-go="profile"><b>◉</b>Profilo</button></div></nav>
+<div class="modal" id="gameModal"><div class="modalbox"><div class="modalhead"><div><div class="eyebrow">SCHEDA GIOCO</div><h2 id="modalTitle">Gioco</h2></div><button class="close" onclick="closeModal()">×</button></div><div id="modalBody"></div></div></div>
+<div class="modal" id="addModal"><div class="modalbox"><div class="modalhead"><h2>Aggiungi un gioco</h2><button class="close" onclick="document.getElementById('addModal').classList.remove('open')">×</button></div><div class="field"><label>Titolo</label><input id="newTitle" placeholder="Nome del gioco"></div><div class="field"><label>Rating BGG</label><input id="newRating" type="number" min="0" max="10" step=".01"></div><button class="btn" onclick="addLocalGame()">Aggiungi alla demo locale</button></div></div>
+<div id="toast" style="position:fixed;bottom:90px;left:50%;transform:translateX(-50%);background:#d8edf4;color:#10243a;padding:10px 15px;border-radius:10px;font-size:12px;display:none;z-index:80"></div>
+<script>
+const seed=[
+{id:'d1',title:'Wingspan',bgg_rating:8.1,genre:'Strategia',players:'1–5',best_players:'3',complexity:2.45,playtime:'40–70 min',symbol:'🪶',colors:['#174d60','#07182d'],personal_rating:8.5},
+{id:'d2',title:'Dune: Imperium',bgg_rating:8.4,genre:'Deck building',players:'1–4',best_players:'3–4',complexity:3.05,playtime:'60–120 min',symbol:'☀',colors:['#59404a','#10263c'],personal_rating:null},
+{id:'d3',title:'Azul',bgg_rating:7.7,genre:'Astratto',players:'2–4',best_players:'2',complexity:1.76,playtime:'30–45 min',symbol:'✧',colors:['#254e71','#071326'],personal_rating:9},
+{id:'d4',title:'Cascadia',bgg_rating:7.9,genre:'Puzzle',players:'1–4',best_players:'2',complexity:1.85,playtime:'30–45 min',symbol:'🌲',colors:['#164b54','#071629'],personal_rating:null},
+{id:'d5',title:'Root',bgg_rating:8.1,genre:'Asimmetrico',players:'2–4',best_players:'4',complexity:3.78,playtime:'60–90 min',symbol:'♜',colors:['#314d6d','#10182c'],personal_rating:8},
+{id:'d6',title:'The Crew',bgg_rating:7.8,genre:'Cooperativo',players:'2–5',best_players:'4',complexity:1.97,playtime:'20 min',symbol:'✦',colors:['#273c64','#071629'],personal_rating:null}
+];
+let games=JSON.parse(localStorage.getItem('giocoGames')||'null')||seed;
+let plays=JSON.parse(localStorage.getItem('giocoPlays')||'[]');
+function persist(){localStorage.setItem('giocoGames',JSON.stringify(games));localStorage.setItem('giocoPlays',JSON.stringify(plays))}
+function esc(s){return String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+function go(id){document.querySelectorAll('.view').forEach(v=>v.classList.toggle('active',v.id===id));document.querySelectorAll('.nav button[data-go]').forEach(b=>b.classList.toggle('active',b.dataset.go===id));window.scrollTo({top:0,behavior:'smooth'});if(id==='play')renderHistory()}
+document.querySelectorAll('[data-go]').forEach(b=>b.addEventListener('click',()=>go(b.dataset.go)));
+function card(g){let colors=g.colors||['#173d60','#071629'];return `<article class="game-card" onclick="openDetails('${esc(g.id)}')"><div class="cover" style="--c1:${colors[0]};--c2:${colors[1]}"><span class="cover-tag">${esc(g.genre||'Collezione')}</span><span class="cover-symbol">${g.symbol||'♟'}</span><span class="cover-title">${esc(g.title)}</span></div><div class="game-meta"><strong>${esc(g.title)}</strong><span>BGG ${g.bgg_rating??'—'} · ${esc(g.players||'—')} giocatori</span></div></article>`}
+function render(){document.getElementById('featured').innerHTML=games.slice(0,8).map(card).join('');document.getElementById('countGames').textContent=games.length;document.getElementById('countExp').textContent='—';document.getElementById('countPlays').textContent=plays.length;renderCatalog();fillSelects();renderHistory()}
+function renderCatalog(){let q=(document.getElementById('q').value||'').toLowerCase(),sort=document.getElementById('sort').value;let list=games.filter(g=>g.title.toLowerCase().includes(q));list.sort((a,b)=>sort==='rating'?(Number(b.bgg_rating)||0)-(Number(a.bgg_rating)||0):sort==='za'?b.title.localeCompare(a.title):a.title.localeCompare(b.title));document.getElementById('catalog').innerHTML=list.length?list.map(card).join(''):'<div class="empty">Nessun gioco trovato.</div>'}
+document.getElementById('q').addEventListener('input',renderCatalog);document.getElementById('sort').addEventListener('change',renderCatalog);
+function fillSelects(){['masterGame','playGame'].forEach(id=>{let s=document.getElementById(id),v=s.value;s.innerHTML=games.map(g=>`<option value="${esc(g.id)}">${esc(g.title)}</option>`).join('');if(v)s.value=v})}
+function openDetails(id){let g=games.find(x=>x.id===id);if(!g)return;document.getElementById('modalTitle').textContent=g.title;let stars=Array.from({length:10},(_,i)=>`<button title="${(i+1)/2} su 10" onclick="setRating('${id}',${(i+1)/2})">${(g.personal_rating||0)>=((i+1)/2)?'★':'☆'}</button>`).join('');document.getElementById('modalBody').innerHTML=`
+<div class="row"><span class="pill">BGG ${esc(g.bgg_rating??'—')}</span><span class="pill">${esc(g.genre||'Genere non indicato')}</span><span class="pill">${esc(g.players||'Giocatori n.d.')}</span></div>
+<div class="section"><label class="note">VALUTAZIONE PERSONALE · DA 1 A 10</label><div class="rating">${stars}</div><div class="note">Il voto selezionato: <b id="myRating">${g.personal_rating??'—'}</b> / 10 · passi da 0,5</div></div>
+<div class="split"><div class="field"><label>Note personali</label><textarea id="gNotes" placeholder="Le vostre impressioni…">${esc(g.notes||'')}</textarea></div><div class="field"><label>Loved · cosa vi è piaciuto</label><textarea id="gLoved" placeholder="Momenti, meccaniche, sensazioni…">${esc(g.loved||'')}</textarea></div></div>
+<div class="field"><label>Flaws · cosa non vi convince</label><textarea id="gFlaws" placeholder="Difetti, frustrazioni, limiti…">${esc(g.flaws||'')}</textarea></div>
+<div class="row"><button class="btn" onclick="saveReview('${id}')">Salva recensione locale</button><button class="secondary" onclick="go('play');closeModal()">Registra una partita</button></div>
+<p class="note">Scheda demo: le modifiche sono salvate solo in questo browser finché non collegheremo il database condiviso.</p>`;document.getElementById('gameModal').classList.add('open')}
+function setRating(id,n){let g=games.find(x=>x.id===id);g.personal_rating=n;persist();openDetails(id)}
+function saveReview(id){let g=games.find(x=>x.id===id);g.notes=document.getElementById('gNotes').value;g.loved=document.getElementById('gLoved').value;g.flaws=document.getElementById('gFlaws').value;persist();closeModal();showToast('Recensione salvata su questo dispositivo')}
+function closeModal(){document.getElementById('gameModal').classList.remove('open')}
+function openGameForm(){document.getElementById('addModal').classList.add('open')}
+function addLocalGame(){let title=document.getElementById('newTitle').value.trim();if(!title)return;games.push({id:'local-'+Date.now(),title,bgg_rating:Number(document.getElementById('newRating').value)||null,genre:'Da catalogare',players:'—',symbol:'♟'});persist();render();document.getElementById('addModal').classList.remove('open');document.getElementById('newTitle').value='';showToast('Aggiunto alla demo locale')}
+function buildScoreTable(){let names=document.getElementById('playerNames').value.split(',').map(x=>x.trim()).filter(Boolean);let cats=document.getElementById('categories').value.split(',').map(x=>x.trim()).filter(Boolean);if(!names.length||!cats.length){showToast('Inserisci giocatori e categorie');return}document.getElementById('scoreTable').innerHTML=`<div class="score-row"><b>Giocatore</b><b>Categorie / valori</b><b>Totale</b></div>`+names.map((n,i)=>`<div class="score-row"><b>${esc(n)}</b><div>${cats.map((c,j)=>`<label class="note">${esc(c)}<input type="number" class="points" data-player="${i}" value="0"></label>`).join('')}</div><strong class="total" id="total${i}">0</strong></div>`).join('');document.querySelectorAll('.points').forEach(x=>x.addEventListener('input',updateTotals));updateTotals()}
+function updateTotals(){let names=document.getElementById('playerNames').value.split(',').map(x=>x.trim()).filter(Boolean);names.forEach((n,i)=>{let total=[...document.querySelectorAll(`.points[data-player="${i}"]`)].reduce((s,x)=>s+(Number(x.value)||0),0);let el=document.getElementById('total'+i);if(el)el.textContent=total})}
+function savePlay(){let game=document.getElementById('playGame'),names=document.getElementById('playerNames').value.split(',').map(x=>x.trim()).filter(Boolean);if(!game.value||!names.length){showToast('Seleziona un gioco e inserisci i giocatori');return}if(!document.querySelector('.points'))buildScoreTable();updateTotals();let results=names.map((name,i)=>({name,total:[...document.querySelectorAll(`.points[data-player="${i}"]`)].reduce((s,x)=>s+(Number(x.value)||0),0)}));results.sort((a,b)=>b.total-a.total);plays.unshift({game:game.options[game.selectedIndex].text,date:new Date().toLocaleDateString('it-IT'),results});persist();renderHistory();document.getElementById('scoreResult').textContent='Partita salvata. Vincitore: '+results[0].name+' ('+results[0].total+' punti).';showToast('Partita salvata su questo dispositivo')}
+function renderHistory(){let el=document.getElementById('playHistory');if(!el)return;el.innerHTML=plays.length?plays.map(p=>`<div class="listitem"><b>${esc(p.game)}</b> · ${esc(p.date)}<br><span class="note">${p.results.map(r=>`${esc(r.name)}: ${r.total}`).join(' · ')}</span></div>`).join(''):'Nessuna partita registrata.'}
+function exportLocal(){let blob=new Blob([JSON.stringify({games,plays},null,2)],{type:'application/json'}),url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download='gio-and-co-dati-locali.json';a.click();URL.revokeObjectURL(url)}
+let toastTimer;function showToast(t){let e=document.getElementById('toast');e.textContent=t;e.style.display='block';clearTimeout(toastTimer);toastTimer=setTimeout(()=>e.style.display='none',2500)}
+render();buildScoreTable();
+</script>
+</body></html>'''
+p=Path("/mnt/data/index-gio-and-co-aggiornato.html")
+p.write_text(html,encoding="utf-8")
+print(f"Creato: {p.name} — {len(html):,} caratteri")

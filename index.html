@@ -1,3 +1,42 @@
+
+Loading older messages…
+se mi fai rifare il giro da capo mi incazzo, dammi il codice completo con il firebase di sicurezza non mi interessa che i dati sono in local lo cambi dopo
+
+Worked for 45s
+Hai ragione, ti ho fatto perdere un passaggio inutile. Dovevo prendere il file che mi avevi già mandato e lavorarci direttamente. Scusa.
+Ecco il codice completo aggiornato, con Firebase Authentication e accesso Google limitato ai due account autorizzati:
+File pronto
+Scarica Gio&co. con Firebase Login
+Ho mantenuto tutte le funzionalità e il design attuali. Ho aggiunto:
+Login Google con Firebase.
+Accesso consentito a giuliamrcse@gmail.com e zgiomil7@gmail.com.
+Blocco dell'interfaccia per gli altri account.
+Pulsante per disconnettersi.
+Una precisazione tecnica importante: questa prima versione applica la lista degli account autorizzati nel frontend. È un filtro per l'accesso normale, non ancora una protezione server-side inviolabile. Per proteggere davvero database e backend dovremo verificare l'identità anche lato server.
+Adesso sostituisci il tuo index.html su GitHub con questo file, mantenendo il nome index.html, e pubblica la modifica. Poi testiamo il login.
+
+gio-and-co-firebase-login.html
+HTML
+dammi il codice in un file txt
+Certo! Ecco il file TXT con tutto il codice completo:
+Scarica Gio&co. — Codice Firebase (.txt)
+
+gio-and-co-firebase-login.txt
+Document
+This might also interest you.
+Ad
+in alto dove si vede la mail puoi scrivere invece "Ciao, nome utente"
+
+Worked for 17s
+Sì! Ho modificato il codice: in alto ora comparirà «Ciao, Giulia» oppure «Ciao, Giovanni», recuperando automaticamente il nome dal profilo Google.
+Scarica il codice completo aggiornato in TXT
+Ho mantenuto tutto il resto invariato.
+
+gio-and-co-firebase-login.txt
+Document
+
+
+
 <!DOCTYPE html>
 <html lang="it">
 <head>
@@ -25,7 +64,7 @@ button,input,select,textarea{font:inherit}button{cursor:pointer}.app{width:min(1
 
 /* Firebase sign-in gate */
 #authGate{position:fixed;inset:0;z-index:9999;display:grid;place-items:center;padding:22px;background:radial-gradient(ellipse at 80% 10%,rgba(23,106,131,.28),transparent 34rem),linear-gradient(145deg,#0b1527,#101c32 55%,#10283d)}
-#authGate[hidden]{display:none!important}.auth-card{width:min(440px,100%);padding:30px 25px;border:1px solid rgba(194,218,232,.18);border-radius:22px;background:linear-gradient(145deg,rgba(28,53,79,.96),rgba(17,34,55,.97));box-shadow:0 24px 70px #0008;text-align:center}.auth-mark{width:58px;height:58px;margin:0 auto 16px;display:grid;place-items:center;border-radius:18px;font-size:27px;font-weight:800;background:linear-gradient(145deg,#398c9b,#173d60)}.auth-card h1{font-size:29px;margin:8px 0}.auth-card p{color:#b6c5d2;font-size:13px;line-height:1.6}.auth-google{width:100%;display:flex;justify-content:center;align-items:center;gap:12px;margin-top:22px;padding:13px 16px;border:1px solid rgba(194,218,232,.2);border-radius:12px;background:#eaf0f3;color:#10243a;font-weight:750}.auth-google:disabled{opacity:.55;cursor:wait}.auth-error{min-height:20px;margin-top:13px;color:#ffb7b7;font-size:12px}.auth-account{display:flex;align-items:center;gap:8px;margin-left:8px}.auth-account span{max-width:160px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:#b8d4e2;font-size:10px}.auth-account button{padding:7px 9px;border:1px solid var(--line);border-radius:9px;background:rgba(255,255,255,.07);color:var(--ivory);font-size:10px}
+#authGate[hidden]{display:none!important}.auth-card{width:min(440px,100%);padding:30px 25px;border:1px solid rgba(194,218,232,.18);border-radius:22px;background:linear-gradient(145deg,rgba(28,53,79,.96),rgba(17,34,55,.97));box-shadow:0 24px 70px #0008;text-align:center}.auth-mark{width:58px;height:58px;margin:0 auto 16px;display:grid;place-items:center;border-radius:18px;font-size:27px;font-weight:800;background:linear-gradient(145deg,#398c9b,#173d60)}.auth-card h1{font-size:29px;margin:8px 0}.auth-card p{color:#b6c5d2;font-size:13px;line-height:1.6}.auth-google{width:100%;display:flex;justify-content:center;align-items:center;gap:12px;margin-top:22px;padding:13px 16px;border:1px solid rgba(194,218,232,.2);border-radius:12px;background:#eaf0f3;color:#10243a;font-weight:750}.auth-google:disabled{opacity:.55;cursor:wait}.auth-error{min-height:20px;margin-top:13px;color:#ffb7b7;font-size:12px}.auth-account{display:flex;align-items:center;gap:8px;margin-left:8px}.auth-account span{max-width:190px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:#b8d4e2;font-size:11px;font-weight:700}.auth-account button{padding:7px 9px;border:1px solid var(--line);border-radius:9px;background:rgba(255,255,255,.07);color:var(--ivory);font-size:10px}
 @media(max-width:600px){.auth-account span{display:none}.auth-card{padding:26px 20px}}
 
 </style>
@@ -138,7 +177,9 @@ gioAuth.onAuthStateChanged(async user => {
     authError.textContent = "Questo account Google non è autorizzato a usare Gio&co.";
     return;
   }
-  signedInEmail.textContent = email;
+  const displayName = (user.displayName || "").trim();
+  const firstName = displayName ? displayName.split(/\s+/)[0] : (email.split("@")[0] || "utente");
+  signedInEmail.textContent = `Ciao, ${firstName}`;
   authError.textContent = "";
   authGate.hidden = true;
 });

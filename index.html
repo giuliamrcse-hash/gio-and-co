@@ -22,11 +22,29 @@ button,input,select,textarea{font:inherit}button{cursor:pointer}.app{width:min(1
 .pill{display:inline-block;border:1px solid var(--line);border-radius:30px;padding:5px 9px;font-size:10px;color:var(--ice);margin:3px}.rating{font-size:22px;letter-spacing:2px;color:var(--gold)}.rating button{border:0;background:none;color:var(--gold);font-size:22px;padding:0 1px}
 .modal{position:fixed;inset:0;z-index:60;display:none;place-items:center;padding:16px;background:#020912c9;backdrop-filter:blur(7px)}.modal.open{display:grid}.modalbox{width:min(650px,100%);max-height:90vh;overflow:auto;background:#13263c;border:1px solid var(--line);border-radius:20px;padding:21px;box-shadow:0 20px 60px #0008}.modalhead{display:flex;justify-content:space-between;align-items:flex-start;position:relative;min-height:142px;padding-right:124px;margin-bottom:15px}.detail-cover{position:absolute;right:0;top:0;width:108px;height:138px;border-radius:14px;overflow:hidden;border:1px solid #ffffff35;box-shadow:0 12px 28px #0007;background:linear-gradient(145deg,var(--cover-a,#24536c),var(--cover-b,#09182c));display:flex;align-items:flex-end;padding:10px}.detail-cover:before{content:"";position:absolute;inset:0;background:radial-gradient(circle at 58% 25%,var(--cover-glow,#9ac9d9),transparent 42%),linear-gradient(180deg,rgba(3,12,24,.05) 10%,rgba(3,12,24,.25) 42%,rgba(3,12,24,.96) 100%)}.detail-cover-symbol{position:absolute;inset:18px 0 auto;text-align:center;font-size:43px;filter:drop-shadow(0 3px 10px #0009)}.detail-cover-title{position:relative;z-index:1;font-size:12px;font-weight:800;line-height:1.15;text-shadow:0 2px 7px #000;overflow-wrap:anywhere}.modalhead h2{max-width:100%;line-height:1.15}.close{border:0;background:none;color:var(--muted);font-size:25px}.row{display:flex;gap:10px;align-items:center;flex-wrap:wrap}.empty{padding:25px;border:1px dashed var(--line);border-radius:15px;color:var(--muted);text-align:center;line-height:1.6}.score-row{display:grid;grid-template-columns:1.3fr 1fr 1fr;gap:8px;align-items:center;margin:8px 0}.score-row input{min-width:0;width:100%;background:#0d1b2d;color:white;border:1px solid var(--line);border-radius:8px;padding:9px}.total{font-size:24px;color:var(--ice);font-weight:800}.listitem{padding:12px 0;border-bottom:1px solid var(--line)}.listitem:last-child{border:0}.tagchip{display:inline-block;padding:4px 8px;margin:3px 3px 0 0;border-radius:20px;background:#1d4962;border:1px solid #47788d;color:#d6edf5;font-size:10px}.recommend-player{display:flex;align-items:center;gap:10px;padding:11px 13px;border:1px solid var(--line);border-radius:12px;background:#0d1b2d;color:var(--ivory);cursor:pointer;min-width:155px}.recommend-player input{width:18px;height:18px;accent-color:#67a9bb;flex:0 0 auto}.recommend-player:has(input:checked){border-color:#67a9bb;background:#17364a;box-shadow:0 0 0 1px #67a9bb55}.recommend-player span{font-size:12px}.recommend-selection{font-size:11px;color:var(--muted);margin:8px 0}.recommend-item{display:flex;justify-content:space-between;gap:12px;align-items:center;padding:12px 0;border-bottom:1px solid var(--line)}
 @media(max-width:850px){.grid{grid-template-columns:repeat(4,minmax(0,1fr))}}@media(max-width:600px){.main{padding:22px 16px}.hero{min-height:300px;padding:22px}.grid{grid-template-columns:repeat(3,minmax(0,1fr));gap:13px 10px}.stats{gap:7px}.stat{padding:12px}.stat strong{font-size:22px}.rail{grid-auto-columns:130px}.split{grid-template-columns:1fr}.score-row{grid-template-columns:1fr 1fr 1fr}}@media(max-width:360px){.grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+
+/* Firebase sign-in gate */
+#authGate{position:fixed;inset:0;z-index:9999;display:grid;place-items:center;padding:22px;background:radial-gradient(ellipse at 80% 10%,rgba(23,106,131,.28),transparent 34rem),linear-gradient(145deg,#0b1527,#101c32 55%,#10283d)}
+#authGate[hidden]{display:none!important}.auth-card{width:min(440px,100%);padding:30px 25px;border:1px solid rgba(194,218,232,.18);border-radius:22px;background:linear-gradient(145deg,rgba(28,53,79,.96),rgba(17,34,55,.97));box-shadow:0 24px 70px #0008;text-align:center}.auth-mark{width:58px;height:58px;margin:0 auto 16px;display:grid;place-items:center;border-radius:18px;font-size:27px;font-weight:800;background:linear-gradient(145deg,#398c9b,#173d60)}.auth-card h1{font-size:29px;margin:8px 0}.auth-card p{color:#b6c5d2;font-size:13px;line-height:1.6}.auth-google{width:100%;display:flex;justify-content:center;align-items:center;gap:12px;margin-top:22px;padding:13px 16px;border:1px solid rgba(194,218,232,.2);border-radius:12px;background:#eaf0f3;color:#10243a;font-weight:750}.auth-google:disabled{opacity:.55;cursor:wait}.auth-error{min-height:20px;margin-top:13px;color:#ffb7b7;font-size:12px}.auth-account{display:flex;align-items:center;gap:8px;margin-left:8px}.auth-account span{max-width:160px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:#b8d4e2;font-size:10px}.auth-account button{padding:7px 9px;border:1px solid var(--line);border-radius:9px;background:rgba(255,255,255,.07);color:var(--ivory);font-size:10px}
+@media(max-width:600px){.auth-account span{display:none}.auth-card{padding:26px 20px}}
+
 </style>
 </head>
 <body>
+<div id="authGate" role="dialog" aria-modal="true" aria-labelledby="authTitle">
+  <div class="auth-card">
+    <div class="auth-mark">G</div>
+    <div class="eyebrow">ACCESSO RISERVATO</div>
+    <h1 id="authTitle">Benvenuti in Gio&co.</h1>
+    <p>Accedi con uno degli account Google autorizzati per aprire la vostra libreria di giochi.</p>
+    <button id="googleSignIn" class="auth-google" type="button"><span aria-hidden="true">G</span> Continua con Google</button>
+    <div id="authError" class="auth-error" role="status" aria-live="polite"></div>
+    <p class="note">Accesso consentito solo agli account autorizzati.</p>
+  </div>
+</div>
+
 <div class="app">
-<header class="topbar"><div class="brand"><div class="mark">G</div><div><div class="brandname">Gio<span>&</span>co.</div><div class="sub">BOARD GAME LIBRARY</div></div></div><div class="row"><button class="secondary" onclick="openGameForm()">＋ Aggiungi</button><div class="menu-wrap"><button class="menu-trigger" aria-label="Apri menu" aria-expanded="false" onclick="toggleMenu()">☰</button><div class="menu-pop" id="mainMenu"><button onclick="menuGo('home')">⌂ &nbsp; Home</button><button onclick="togglePlayerSubmenu()">♙ &nbsp; Giocatori　⌄</button><div class="submenu" id="playerSubmenu"><button onclick="menuGo('players','profiles')">Profili giocatori</button><button onclick="menuGo('players','suggestions')">Giochi consigliati</button><button onclick="menuGo('players','form')">QR e Google Form</button></div></div></div></div></header>
+<header class="topbar"><div class="brand"><div class="mark">G</div><div><div class="brandname">Gio<span>&</span>co.</div><div class="sub">BOARD GAME LIBRARY</div></div></div><div class="row"><div class="auth-account"><span id="signedInEmail"></span><button type="button" onclick="firebaseSignOut()">Esci</button></div><button class="secondary" onclick="openGameForm()">＋ Aggiungi</button><div class="menu-wrap"><button class="menu-trigger" aria-label="Apri menu" aria-expanded="false" onclick="toggleMenu()">☰</button><div class="menu-pop" id="mainMenu"><button onclick="menuGo('home')">⌂ &nbsp; Home</button><button onclick="togglePlayerSubmenu()">♙ &nbsp; Giocatori　⌄</button><div class="submenu" id="playerSubmenu"><button onclick="menuGo('players','profiles')">Profili giocatori</button><button onclick="menuGo('players','suggestions')">Giochi consigliati</button><button onclick="menuGo('players','form')">QR e Google Form</button></div></div></div></div></header>
 <main class="main">
 <section id="home" class="view active">
 <div class="eyebrow">LA VOSTRA COLLEZIONE</div><h1>Che cosa giochiamo oggi?</h1><p class="intro">Giochi, ricordi, regolamenti e punteggi. Tutto intorno al tavolo.</p>
@@ -53,6 +71,78 @@ button,input,select,textarea{font:inherit}button{cursor:pointer}.app{width:min(1
 <div class="modal" id="gameModal"><div class="modalbox"><div class="modalhead"><div><div class="eyebrow">SCHEDA GIOCO</div><h2 id="modalTitle">Gioco</h2></div><button class="close" onclick="closeModal()">×</button></div><div id="modalBody"></div></div></div>
 <div class="modal" id="addModal"><div class="modalbox"><div class="modalhead"><h2>Aggiungi un gioco</h2><button class="close" onclick="document.getElementById('addModal').classList.remove('open')">×</button></div><div class="field"><label>Titolo</label><input id="newTitle" placeholder="Nome del gioco"></div><div class="field"><label>Rating BGG</label><input id="newRating" type="number" min="0" max="10" step=".01"></div><button class="btn" onclick="addLocalGame()">Aggiungi alla demo locale</button></div></div>
 <div id="toast" style="position:fixed;bottom:90px;left:50%;transform:translateX(-50%);background:#d8edf4;color:#10243a;padding:10px 15px;border-radius:10px;font-size:12px;display:none;z-index:80"></div>
+<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-auth-compat.js"></script>
+<script>
+const firebaseConfig = {
+  apiKey: "AIzaSyADFePv7-Qz9TzPKgOswVSKtdKZjt01qGA",
+  authDomain: "gio-and-co.firebaseapp.com",
+  projectId: "gio-and-co",
+  storageBucket: "gio-and-co.firebasestorage.app",
+  messagingSenderId: "947922654256",
+  appId: "1:947922654256:web:54a3d1322c387337d209f5",
+  measurementId: "G-QQJ2MJM557"
+};
+
+// Allowlist applicata dopo il login Google. Non è un controllo server-side.
+const AUTHORIZED_EMAILS = ["giuliamrcse@gmail.com", "zgiomil7@gmail.com"];
+firebase.initializeApp(firebaseConfig);
+const gioAuth = firebase.auth();
+const googleProvider = new firebase.auth.GoogleAuthProvider();
+googleProvider.setCustomParameters({ prompt: "select_account" });
+
+const authGate = document.getElementById("authGate");
+const signInButton = document.getElementById("googleSignIn");
+const authError = document.getElementById("authError");
+const signedInEmail = document.getElementById("signedInEmail");
+
+signInButton.addEventListener("click", async () => {
+  authError.textContent = "";
+  signInButton.disabled = true;
+  signInButton.textContent = "Connessione a Google…";
+  try {
+    const result = await gioAuth.signInWithPopup(googleProvider);
+    const email = (result.user.email || "").toLowerCase();
+    if (!AUTHORIZED_EMAILS.includes(email)) {
+      await gioAuth.signOut();
+      authError.textContent = "Questo account Google non è autorizzato a usare Gio&co.";
+    }
+  } catch (error) {
+    console.error("Firebase sign-in error:", error);
+    authError.textContent = error.code === "auth/popup-closed-by-user"
+      ? "Accesso annullato. Puoi riprovare."
+      : "Non è stato possibile completare l'accesso. Riprova.";
+  } finally {
+    signInButton.disabled = false;
+    signInButton.innerHTML = '<span aria-hidden="true">G</span> Continua con Google';
+  }
+});
+
+function firebaseSignOut() {
+  gioAuth.signOut().catch(error => {
+    console.error(error);
+    showToast("Errore durante la disconnessione");
+  });
+}
+
+gioAuth.onAuthStateChanged(async user => {
+  if (!user) {
+    authGate.hidden = false;
+    signedInEmail.textContent = "";
+    return;
+  }
+  const email = (user.email || "").toLowerCase();
+  if (!AUTHORIZED_EMAILS.includes(email)) {
+    await gioAuth.signOut();
+    authGate.hidden = false;
+    authError.textContent = "Questo account Google non è autorizzato a usare Gio&co.";
+    return;
+  }
+  signedInEmail.textContent = email;
+  authError.textContent = "";
+  authGate.hidden = true;
+});
+</script>
 <script>
 const seed=[
 {id:'d1',title:'Wingspan',bgg_rating:8.1,genre:'Strategia',players:'1–5',best_players:'3',complexity:2.45,playtime:'40–70 min',symbol:'🪶',colors:['#174d60','#07182d'],personal_rating:8.5},
@@ -86,8 +176,6 @@ function toggleHeroAutoplay(){heroPaused=!heroPaused;startHeroTimer();}
 function initHero(){renderHero();startHeroTimer();let h=document.getElementById('homeHero');h.addEventListener('click',e=>{if(e.target.closest('.hero-controls')||e.target.closest('.actions'))return;toggleHeroAutoplay();});}
 function go(id){document.querySelectorAll('.view').forEach(v=>v.classList.toggle('active',v.id===id));document.querySelectorAll('.nav button[data-go]').forEach(b=>b.classList.toggle('active',b.dataset.go===id));window.scrollTo({top:0,behavior:'smooth'});if(id==='profile')renderHistory();if(id==='players'){renderFixedOptions();renderPlayers();showPlayerPanel('profiles')} }
 function toggleMenu(){let m=document.getElementById('mainMenu'),b=document.querySelector('.menu-trigger');m.classList.toggle('open');b.setAttribute('aria-expanded',m.classList.contains('open'))}
-function menuGo(id){document.getElementById('mainMenu').classList.remov
-e('open');document.querySelector('.menu-trigger').setAttribute('aria-expanded','false');go(id)}
 const FIXED_PREFS=['Cooperativo','Competitivo','Semi-cooperativo','A squadre','Deck-building','Drafting','Piazzamento lavoratori','Gestione risorse','Deduzione','Bluff','Aste','Controllo area','Puzzle','Costruzione motore','Conflitto diretto','Negoziazione','Interazione bassa','Interazione alta','Astratto','Narrativo','Party game','Fortuna / alea'];
 function togglePlayerSubmenu(){document.getElementById('playerSubmenu').classList.toggle('open')}
 function menuGo(id,sub){document.getElementById('mainMenu').classList.remove('open');document.getElementById('playerSubmenu')?.classList.remove('open');document.querySelector('.menu-trigger').setAttribute('aria-expanded','false');go(id);if(id==='players')showPlayerPanel(sub||'profiles')}

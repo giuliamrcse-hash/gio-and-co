@@ -1,5 +1,4 @@
-from pathlib import Path
-html = r'''<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="it">
 <head>
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
@@ -85,7 +84,4 @@ function exportLocal(){let blob=new Blob([JSON.stringify({games,plays},null,2)],
 let toastTimer;function showToast(t){let e=document.getElementById('toast');e.textContent=t;e.style.display='block';clearTimeout(toastTimer);toastTimer=setTimeout(()=>e.style.display='none',2500)}
 render();buildScoreTable();
 </script>
-</body></html>'''
-p=Path("/mnt/data/index-gio-and-co-aggiornato.html")
-p.write_text(html,encoding="utf-8")
-print(f"Creato: {p.name} — {len(html):,} caratteri")
+</body></html>

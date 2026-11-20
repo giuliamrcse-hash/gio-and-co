@@ -1,0 +1,343 @@
+
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#102F35">
+  <title>Gio&co. — Board Game Library</title>
+
+  <style>
+    :root {
+      --petrol: #102F35;
+      --teal: #17645F;
+      --ocean: #244B68;
+      --night: #172638;
+      --cream: #F0E9DE;
+      --gold: #C5AA78;
+      --muted: #A8B8B8;
+      --surface: #1B343B;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      background: var(--petrol);
+      color: var(--cream);
+      font-family: Georgia, serif;
+      min-height: 100vh;
+    }
+
+    button, input { font: inherit; }
+
+    header {
+      padding: 28px 6%;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid #ffffff18;
+    }
+
+    .brand {
+      font-size: 28px;
+      letter-spacing: -1px;
+      color: var(--cream);
+    }
+
+    .brand span { color: var(--gold); }
+
+    .subtitle {
+      font: 10px Arial, sans-serif;
+      letter-spacing: 3px;
+      color: var(--muted);
+      margin-top: 5px;
+    }
+
+    .status {
+      font: 11px Arial, sans-serif;
+      color: #9BC9B8;
+      border: 1px solid #477B6D;
+      padding: 7px 12px;
+      border-radius: 30px;
+    }
+
+    main {
+      max-width: 1100px;
+      margin: auto;
+      padding: 35px 6% 110px;
+    }
+
+    .welcome {
+      margin-bottom: 35px;
+    }
+
+    .eyebrow {
+      font: 11px Arial, sans-serif;
+      color: var(--gold);
+      letter-spacing: 3px;
+    }
+
+    h1 {
+      font-size: clamp(32px, 6vw, 52px);
+      font-weight: normal;
+      margin: 12px 0;
+    }
+
+    .welcome p {
+      font: 14px Arial, sans-serif;
+      color: var(--muted);
+      line-height: 1.7;
+    }
+
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+      margin: 30px 0 40px;
+    }
+
+    .stat {
+      background: var(--surface);
+      border: 1px solid #ffffff12;
+      border-radius: 12px;
+      padding: 18px;
+    }
+
+    .stat strong {
+      display: block;
+      font-size: 29px;
+      color: var(--gold);
+      font-weight: normal;
+    }
+
+    .stat span {
+      font: 11px Arial, sans-serif;
+      color: var(--muted);
+    }
+
+    .section-heading {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 18px;
+    }
+
+    h2 {
+      font-size: 23px;
+      font-weight: normal;
+    }
+
+    .games {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(145px, 1fr));
+      gap: 16px;
+    }
+
+    .game {
+      background: var(--surface);
+      border-radius: 12px;
+      overflow: hidden;
+      border: 1px solid #ffffff12;
+    }
+
+    .cover {
+      height: 145px;
+      display: grid;
+      place-items: center;
+      font-size: 42px;
+      background: linear-gradient(145deg, var(--ocean), var(--teal));
+    }
+
+    .game-info { padding: 13px; }
+
+    .game-info h3 {
+      margin: 0 0 8px;
+      font-size: 17px;
+      font-weight: normal;
+    }
+
+    .game-info p {
+      font: 11px Arial, sans-serif;
+      color: var(--muted);
+      margin: 0;
+      line-height: 1.6;
+    }
+
+    .search {
+      width: 100%;
+      background: var(--night);
+      color: var(--cream);
+      border: 1px solid #ffffff25;
+      padding: 14px;
+      border-radius: 9px;
+      margin-bottom: 20px;
+      outline: none;
+    }
+
+    .search:focus { border-color: var(--gold); }
+
+    .nav {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: #102F35F5;
+      border-top: 1px solid #ffffff20;
+      display: flex;
+      justify-content: space-around;
+      padding: 13px 5px;
+      backdrop-filter: blur(12px);
+    }
+
+    .nav button {
+      background: none;
+      border: none;
+      color: var(--muted);
+      font: 11px Arial, sans-serif;
+      cursor: pointer;
+      padding: 5px;
+    }
+
+    .nav button.active { color: var(--gold); }
+
+    .nav .add {
+      background: var(--teal);
+      color: white;
+      border-radius: 50%;
+      width: 42px;
+      height: 42px;
+      font-size: 23px;
+      margin-top: -13px;
+    }
+
+    .page { display: none; }
+    .page.active { display: block; }
+
+    .placeholder {
+      background: var(--surface);
+      padding: 30px;
+      border-radius: 12px;
+      color: var(--muted);
+      font: 14px Arial, sans-serif;
+      line-height: 1.8;
+    }
+
+    @media (max-width: 480px) {
+      header { padding: 20px 5%; }
+      main { padding: 28px 5% 110px; }
+      .stats { gap: 8px; }
+      .stat { padding: 12px; }
+      .stat strong { font-size: 24px; }
+      .cover { height: 125px; }
+    }
+  </style>
+</head>
+
+<body>
+
+<header>
+  <div>
+    <div class="brand">Gio<span>&</span>co.</div>
+    <div class="subtitle">BOARD GAME LIBRARY</div>
+  </div>
+  <div class="status">● LIBRARY</div>
+</header>
+
+<main>
+
+  <section id="home" class="page active">
+    <div class="welcome">
+      <div class="eyebrow">YOUR PERSONAL COLLECTION</div>
+      <h1>Every game has a story.</h1>
+      <p>La tua collezione, sempre a portata di mano.<br>
+      Cosa giochiamo oggi?</p>
+    </div>
+
+    <div class="stats">
+      <div class="stat">
+        <strong>0</strong>
+        <span>Giochi</span>
+      </div>
+      <div class="stat">
+        <strong>0</strong>
+        <span>Espansioni</span>
+      </div>
+      <div class="stat">
+        <strong>0</strong>
+        <span>Partite</span>
+      </div>
+    </div>
+
+    <div class="section-heading">
+      <h2>La collezione</h2>
+    </div>
+
+    <div class="placeholder">
+      La tua libreria è ancora vuota.<br>
+      Aggiungi il tuo primo gioco per iniziare!
+    </div>
+  </section>
+
+  <section id="library" class="page">
+    <div class="eyebrow">THE COLLECTION</div>
+    <h1>La libreria</h1>
+    <input class="search" placeholder="Cerca un gioco..." id="search">
+    <div id="gameList" class="games"></div>
+  </section>
+
+  <section id="assistant" class="page">
+    <div class="eyebrow">YOUR GAME MASTER</div>
+    <h1>Game Master</h1>
+    <div class="placeholder">
+      Il tuo assistente ai regolamenti.<br><br>
+      Qui potrai selezionare un gioco e chiedere
+      informazioni sulle regole, le carte e le strategie.
+      <br><br>
+      <span style="color:var(--gold)">
+        Assistente in fase di sviluppo.
+      </span>
+    </div>
+  </section>
+
+  <section id="profile" class="page">
+    <div class="eyebrow">YOUR SPACE</div>
+    <h1>Profilo</h1>
+    <div class="placeholder">
+      Impostazioni, backup e sincronizzazione
+      saranno disponibili qui.
+    </div>
+  </section>
+
+</main>
+
+<nav class="nav">
+  <button class="active" data-page="home">⌂<br>Home</button>
+  <button data-page="library">▦<br>Libreria</button>
+  <button class="add" onclick="alert('Inserimento giochi: in arrivo!')">+</button>
+  <button data-page="assistant">✧<br>Game Master</button>
+  <button data-page="profile">○<br>Profilo</button>
+</nav>
+
+<script>
+  document.querySelectorAll('[data-page]').forEach(button => {
+    button.addEventListener('click', () => {
+      const page = button.dataset.page;
+
+      document.querySelectorAll('.page').forEach(p =>
+        p.classList.remove('active')
+      );
+
+      document.getElementById(page).classList.add('active');
+
+      document.querySelectorAll('[data-page]').forEach(b =>
+        b.classList.remove('active')
+      );
+
+      button.classList.add('active');
+    });
+  });
+</script>
+
+</body>
+</html>
